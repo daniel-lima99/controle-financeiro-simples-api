@@ -5,6 +5,11 @@ API de controle financeiro em Typescript e Node.js.
 ## Status
 :construction: Em andamento :construction:
 
+## Requisitos
+- PostgreSQL (ou outro banco que consiga configurar)
+- Node.js
+- Package Managers (npm, pnpm, yarn, etc.)
+
 ## Setup
 ```bash
 
@@ -12,6 +17,10 @@ API de controle financeiro em Typescript e Node.js.
 
 git  clone  https://github.com/daniel-lima99/controle-financeiro-simples-api.git
 
+
+#instalar as dependências
+
+npm install
   
 #Criar um arquivo .env na raíz do projeto
 
@@ -19,25 +28,21 @@ git  clone  https://github.com/daniel-lima99/controle-financeiro-simples-api.git
 
 DATABASE_URL="postgresql://postgres:wesleysafadao@localhost:5432/financeiro-simples?schema=public"
 
-  
 
 # Faça a migração do schema prisma:
 
 npx  prisma  migrate  dev  --name  init
 
-  
 
 # Execute o script para criação do item "saldo" no banco de dados:
 
 npm  run  saldo
 
-  
 
 # Por fim, execute o código utilizando:
 
 npm  run  dev
 
-  
 
 # O servidor iniciará na porta 3000.
 ```
