@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "name": "back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.15.0",
+    "prisma": "^6.6.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch ./src/database/server.ts",
+    "saldo": "tsx ./src/utils/CriarSaldo.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

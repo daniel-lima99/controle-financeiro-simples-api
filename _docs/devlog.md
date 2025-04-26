@@ -1,0 +1,30 @@
+# Devlog
+Nesse documento vou detalhar todas as decisões de desenvolvimento que tomei enquanto trabalhava nesse projeto, em ordem cronológica.
+
+## 24/04/25
+No primeiro dia, configurei o ambiente de desenvolvimento do backend. As tecnologias utilizadas foram as seguintes:
+- TypeScript, Node.js, Express: tecnologias que eu tenho maior domínio.
+- PostgreSQL, Prisma ORM: banco de dados com o qual tenho maior familiaridade e a única ORM que eu já usei (inserir carinha de derreter)
+Organização das pastas:
+- Controllers e Services: são as pastas que regem a maior parte da lógica do projeto, sendo que os services são onde a lógica realmente acontece e os controllers trabalham com a captura e retorno das requisições.
+- Database: onde está a configuração do servidor e vai servir como ponto de partida para essa aplicação ao digitar o comando "npm run dev"
+- Utils: contém os serviços que vão ser utilizados ao longo da aplicação fora do conteúdo principal. Ali adicionei o PrismaClient e um script para gerar uma tabela "saldo" no banco de dados, que explicarei mais a frente.
+Na descrição que me foi passada sugeria uma pasta para rotas, mas a minha forma de desenvolver utiliza um único arquivo para as rotas, por isso coloquei o arquivo solto na pasta "src".
+
+### Desenvolvimento
+No início tudo parecia simples e intuitivo, configurei o servidor, o banco e comecei a programar a lógica. Eu teria 4 services e 4 controllers: Entrada, Saída, Editar e Deletar.
+Comecei a desenvolver o serviço de Entrada. O usuário vai digitar o valor, o tipo (que seria "entrada"), a descrição e a categoria. Porém, ao terminar de desenvolver e testar, entendi que tanto a entrada quanto a saída teriam a mesma lógica, sendo que a única diferença no banco seria a coluna "tipo". O que me levou a uma espiral de conclusões que me fizeram reformular completamente o design do projeto.
+Não fazia sentido manter tudo separado, afinal o projeto tem a premissa de ser simples e não-escalável, então optei por mudar o nome "Entrada" para "Transacao" e deletar os arquivos onde eu codificaria a saída. Testei, até aí funcionava.
+Antes de continuar para as funções de Editar e Deletar, eu decidi desenvolver a função de Saldo, que acabou sendo um pouco mais complicado do que eu pensava. A primeira ideia que eu tive é que a função iria verificar as entradas e saídas na tabela "transacao", somando e subtraindo conforme o tipo armazenado na coluna "tipo", após o cálculo ele exibiria o resultado na tela e o usuário veria seu saldo.
+Pensei em três formas de fazer isso: a primeira seria fazer uma varredura completa, desde a primeira transação até a última e trazer o resultado, porém, conforme a quantidade de transações aumentasse, isso consumiria processamento desnecessário e causaria lentidão. A segunda forma seria sempre pegar a última transação nova e fazer o cálculo, mas tanto nessa quanto na primeira o programa poderia se comportar de forma errônea e imprevisível, visto que eu poderia editar e deletar qualquer transação a qualquer momento. A última forma foi deixar esse cálculo para a própria função de Transação, que é o que eu decidi.
+Para isso, criei uma nova tabela no banco de dados chamada "saldo". Essa tabela teria apenas um item e iniciaria com zero. De acordo com o tipo de transação, o código resgataria esse valor, somaria ou subtrairia e, por fim, armazenaria o resultado no banco de dados. Dessa forma, a aplicação precisaria apenas fazer uma requisição GET para pegar o saldo e a atualização do mesmo ocorreria somente no caso de novas transações. Adicionando esse tipo de lógica nas próximas duas funcionalidades, nos livramos da imprevisibilidade do projeto.
+Feito isso, eu precisava de alguma forma de popular a tabela, visto que as funcionalidades esperariam que o item "saldo" já existisse e trabalhariam apenas com consulta e atualização do mesmo. Pesquisando, vi uma sugestão de escrever um script que funciona apenas para instanciar o item, foi assim que surgiu o arquivo "CriarSaldo.ts" na pasta "utils", junto com o script "npm run saldo".
+Teste, instanciei o item com sucesso, fiz uma transação e recebi um valor completamente incorreto. Tentei fazer uma entrada de 25.99 e recebi no banco o valor de 36.48999999999999. Ah, o bom e velho Float, confesso que não vi essa chegando. Já era tarde, então deixei para o dia seguinte.
+
+## 25/04/25
+Consegui resolver o problema dos números flutuantes. Bastou transformar o tipo de Float para Decimal no modelo Prisma, mas também tive que fazer reajustes no código das transações, para que o próprio Prisma lidasse com as operações de adição e subtração, a fim de evitar que houvesse mais imprevisibilidades. Acredito que deixa o projeto muito acoplado a uma tecnologia, mas numa aplicação pequena como essa não vejo problemas. Agora a funcionalidade de transações está completa.
+
+## 26/04/25
+Desenvolver a funcionalidade de saldo foi fácil, não tinha nenhum parâmetro, era só passar. A funcionalidade de ver transações, no entanto, foi mais desafiadora. Eu poderia simplesmente mandar o prisma achar tudo e mandar para o front, mas com o tempo isso iria ficar muito pesado, então optei por pegar de 10 em 10. O problema é que eu nunca fiz, nem sei fazer paginação, então foi a primeira vez e eu tive que aprender bastante coisa para conseguir fazer funcionar. Ainda falta filtrar por data e por tipo.
+Na hora de fazer as funções de deletar e editar, pensei em fazer uma função em comum para buscar o id da transação que eu queria alterar ou deletar. Criei um arquivo chamado "buscarTransacaoPorId" na pasta "utils", durou uns 3 minutos. Logo percebi que não fazia mais sentido, porque no frontend o usuário já vai estar com a transação completamente carregada do banco de dados. Nesse caso, "Editar" vai abrir a transação com os dados carregados no front e enviar a atualização completa, "Deletar" vai apenas mandar um delete no banco de dados e recalcular o saldo total.
+Após isso, fiz a filtragem e ordenação no backend, foi bem confuso, mas no fim acabou ficando bem simples. Testei todas as requisições no Postman e está funcionando bem. Hora de fazer o frontend.
