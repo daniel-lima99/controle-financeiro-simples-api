@@ -1,5 +1,5 @@
 
-# # API Controle Financeiro Simples
+# API Controle Financeiro Simples
 API de controle financeiro em Typescript e Node.js.
 
 ## Status
