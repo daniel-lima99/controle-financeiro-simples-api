@@ -44,21 +44,23 @@ npm  run  dev
 Existe um arquivo .json exportado do Postman com os exemplos que eu utilizei. Para facilitar a compreensão, vou especificar pontos que serão importantes.
 
 ### Transação
-```json
-"id": número //usado apenas para editar ou deletar transações
-"tipo": "entrada" | "saida"
-"valor": número | string //desde que seja possível converter para números no backend
-"descricao": string
-"categoria": "Alimentação" | "Lazer" | "Despesas" | "Investimentos" | "Salário" | "Freelances"
+```go
+- id: número (usado apenas para editar ou deletar transações)
+- tipo: "entrada" ou "saida"
+- valor: número ou string (desde que seja possível converter para número no backend)
+- descricao: string
+- categoria: "Alimentação", "Lazer", "Despesas", "Investimentos", "Salário" ou "Freelances"
+
 ```
 
 ### Ver Saldo e Ver Transações
-Não precisam de nenhum parâmetro, porém é necessário mandar pelo menos um JSON vazio para "Ver Transações", que vai abrir a primeira página, para mais páginas veja abaixo.
+Não precisam de nenhum parâmetro, porém é necessário mandar pelo menos um JSON vazio para "Ver Transações", que vai abrir a primeira página, ordenada de por data de forma decrescente, para mais páginas e filtros veja abaixo.
 
 ### Filtros e Paginação
-```json
-"pagina": número
-"tipo": "entrada" | "saida"
-"classificação": "data" | "valor"
-"ordenação": "asc" | "desc"
+```go
+- pagina: número
+- tipo: "entrada" ou "saida" (opcional)
+- classificação: "data" ou "valor"
+- ordenação: "asc" ou "desc"
+
 ```
