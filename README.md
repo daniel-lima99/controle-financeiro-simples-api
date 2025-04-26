@@ -60,7 +60,7 @@ Existe um arquivo .json exportado do Postman com os exemplos que eu utilizei. Pa
 ```
 
 ### Ver Saldo e Ver Transações
-Não precisam de nenhum parâmetro, porém é necessário mandar pelo menos um JSON vazio para "Ver Transações", que vai abrir a primeira página, ordenada de por data de forma decrescente, para mais páginas e filtros veja abaixo.
+Não precisam de nenhum parâmetro, porém é necessário mandar pelo menos um JSON vazio para "Ver Transações", que vai abrir a primeira página, ordenada por data de forma decrescente, para mais páginas e filtros veja abaixo.
 
 ### Filtros e Paginação
 ```go
