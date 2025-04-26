@@ -10,7 +10,7 @@ API de controle financeiro em Typescript e Node.js.
 
 # clonar repositório
 
-git  clone  https://github.com/daniel-lima99/financeiro-simples
+git  clone  https://github.com/daniel-lima99/controle-financeiro-simples-api.git
 
   
 
