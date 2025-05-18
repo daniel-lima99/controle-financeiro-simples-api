@@ -12,7 +12,8 @@ API de controle financeiro em Typescript e Node.js.
 
 git  clone  https://github.com/daniel-lima99/controle-financeiro-simples-api.git
 
-  
+
+#Criar um arquivo .env na raíz
 
 # Editar o link para o banco de dados no arquivo .env com os parâmetros condizentes com seu PostgreSQL:
 

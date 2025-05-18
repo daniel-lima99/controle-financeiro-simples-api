@@ -6,7 +6,7 @@ interface TransacaoProps {
   tipo: string
   valor: number
   descricao: string
-  categoria: string //PRECISO SABER O QUE É CATEGORIA
+  categoria: string
 }
 
 export class TransacaoService {

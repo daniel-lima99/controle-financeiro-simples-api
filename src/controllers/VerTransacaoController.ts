@@ -4,7 +4,7 @@ import { VerTransacaoService } from "../services/VerTransacaoService"
 export class VerTransacaoController {
   async handle(req: Request, res: Response) {
     try {
-      const { pagina, tipo, classificacao, ordenacao } = req.body as {
+      const { pagina, tipo, classificacao, ordenacao } = req.query as {
         pagina?: number
         tipo?: "entrada" | "saida"
         classificacao?: "data" | "valor"

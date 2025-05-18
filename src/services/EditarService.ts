@@ -23,6 +23,8 @@ export class EditarService {
       throw new Error("Categoria inválida")
     }
 
+    valor = Number(valor)
+
     const transacaoAntiga = await prisma.transacao.findUnique({
       where: {
         id,
@@ -35,13 +37,20 @@ export class EditarService {
     let novoSaldo = saldoAtual!.valor.toNumber()
     const valorAntigo = transacaoAntiga!.valor.toNumber()
 
-    //desfaz a transação antiga, se foi entrada subtrai o valor, se foi saída soma o valor
-    transacaoAntiga!.tipo === "entrada"
-      ? (novoSaldo -= valorAntigo)
-      : (novoSaldo += valorAntigo)
+    if (transacaoAntiga!.tipo != tipo || valorAntigo != valor) {
 
-    //se for entrada soma, se for saída subtrai
-    tipo === "entrada" ? (novoSaldo += valor) : (novoSaldo -= valor)
+      transacaoAntiga!.tipo === "entrada"
+        ? (novoSaldo -= valorAntigo)
+        : (novoSaldo += valorAntigo)
+        console.log(novoSaldo)
+
+      //se for entrada soma, se for saída subtrai
+      tipo === "entrada" ? (novoSaldo += valor) : (novoSaldo -= valor)
+      console.log(typeof valor, valor)
+      console.log(novoSaldo)
+    }
+
+    //desfaz a transação antiga, se foi entrada subtrai o valor, se foi saída soma o valor
 
     const editar = await prisma.$transaction([
       prisma.transacao.update({
